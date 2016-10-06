@@ -1,0 +1,60 @@
+package pl.weeia.localannouncements.domain.user.finder;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import pl.weeia.localannouncements.domain.user.dto.UserSnapshot;
+import pl.weeia.localannouncements.domain.user.entity.User;
+import pl.weeia.localannouncements.domain.user.repo.UserRepository;
+import pl.weeia.localannouncements.sharedkernel.annotations.Finder;
+
+@Finder
+public class UserSnapshotFinderImpl
+   implements UserSnapshotFinder {
+
+   private final UserRepository userRepository;
+
+   @Autowired
+   public UserSnapshotFinderImpl(UserRepository userRepository) {
+      this.userRepository = userRepository;
+   }
+
+   @Override
+   public UserSnapshot findById(Long id) {
+      User user = userRepository.findOne(id);
+
+      return user == null ? null : user.toSnapshot();
+   }
+
+   @Override
+   public UserSnapshot findByLogin(String login) {
+      User user = userRepository.findOneByLoginIgnoreCase(login);
+
+      return user == null ? null : user.toSnapshot();
+   }
+
+   @Override
+   public Map<Long, UserSnapshot> findAllAsMap(Set<Long> ids) {
+      List<User> users = userRepository.findAll(ids);
+
+      return users
+            .stream()
+            .map(User::toSnapshot)
+            .collect(Collectors.toMap(UserSnapshot::getId, s->s));
+
+   }
+
+	@Override
+	public List<UserSnapshot> findAll() {
+		List<User> users = userRepository.findAll();
+		return users
+				.stream()
+				.map(User::toSnapshot)
+				.collect(Collectors.toList());
+	}
+
+}
