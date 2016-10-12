@@ -2,7 +2,7 @@ package pl.weeia.localannouncements.web.restapi.account;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import pl.weeia.localannouncements.domain.user.dto.UserSnapshot;
+import pl.weeia.localannouncements.entity.User;
 
 @ApiModel
 public class Account {
@@ -10,9 +10,9 @@ public class Account {
    private final Long id;
    private final String login;
 
-   public Account(UserSnapshot userSnapshot) {
-      this.id = userSnapshot.getId();
-      this.login = userSnapshot.getLogin();
+   public Account(User user) {
+      this.id = user.getId();
+      this.login = user.getLogin();
    }
 
    @ApiModelProperty(value = "Account unique identifier")

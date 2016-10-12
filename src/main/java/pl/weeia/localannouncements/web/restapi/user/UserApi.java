@@ -10,29 +10,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.weeia.localannouncements.domain.user.dto.UserSnapshot;
-import pl.weeia.localannouncements.domain.user.finder.UserSnapshotFinder;
+import pl.weeia.localannouncements.entity.User;
+import pl.weeia.localannouncements.repository.UserRepository;
 
 @RestController
 @RequestMapping("/user")
 public class UserApi {
-	private UserSnapshotFinder userSnapshotFinder;
+    
+	private UserRepository userRepository;
 	
 	@Autowired
-	public UserApi(UserSnapshotFinder userSnapshotFinder){
-		this.userSnapshotFinder = userSnapshotFinder;
+	public UserApi(UserRepository userRepository){
+		this.userRepository = userRepository;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public HttpEntity<List<User>> list(){
-		List<UserSnapshot> userSnapshots = userSnapshotFinder.findAll();
-		List<User> users = userSnapshots
+	public HttpEntity<List<UserResponse>> list(){
+		List<User> users = userRepository.findAll();
+		List<UserResponse> usersResponse = users
 				.stream()
-				.map(User::new)
+				.map(UserResponse::new)
 				.collect(Collectors.toList());
 		
 		return ResponseEntity
 				.ok()
-				.body(users);
+				.body(usersResponse);
 	}
 }

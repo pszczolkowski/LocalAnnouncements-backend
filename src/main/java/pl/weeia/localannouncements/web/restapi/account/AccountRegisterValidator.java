@@ -3,18 +3,18 @@ package pl.weeia.localannouncements.web.restapi.account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 
-import pl.weeia.localannouncements.domain.user.finder.UserSnapshotFinder;
+import pl.weeia.localannouncements.repository.UserRepository;
 import pl.weeia.localannouncements.sharedkernel.annotations.RestValidator;
 import pl.weeia.localannouncements.web.restapi.commonvalidation.AbstractValidator;
 
 @RestValidator
 public class AccountRegisterValidator extends AbstractValidator {
 
-	private final UserSnapshotFinder userSnapshotFinder;
+	private final UserRepository userRepository;
 
 	@Autowired
-	public AccountRegisterValidator(UserSnapshotFinder userSnapshotFinder) {
-		this.userSnapshotFinder = userSnapshotFinder;
+	public AccountRegisterValidator(UserRepository userRepository) {
+		this.userRepository = userRepository;
 	}
 
 	@Override
@@ -32,6 +32,6 @@ public class AccountRegisterValidator extends AbstractValidator {
 	}
 
 	private boolean loginIsTaken(String login) {
-		return userSnapshotFinder.findByLogin(login) != null;
+		return userRepository.findOneByLoginIgnoreCase(login) != null;
 	}
 }
