@@ -1,4 +1,4 @@
-package pl.weeia.localannouncements.domain.util;
+package pl.weeia.localannouncements.entity.util;
 
 import java.io.IOException;
 import java.time.ZoneId;

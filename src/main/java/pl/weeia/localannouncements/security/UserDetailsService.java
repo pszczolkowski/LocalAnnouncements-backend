@@ -1,41 +1,36 @@
 package pl.weeia.localannouncements.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import pl.weeia.localannouncements.domain.user.dto.UserSnapshot;
-import pl.weeia.localannouncements.domain.user.finder.UserSnapshotFinder;
+import pl.weeia.localannouncements.entity.User;
+import pl.weeia.localannouncements.repository.UserRepository;
+
 
 @Component("userDetailsService")
 public class UserDetailsService
    implements org.springframework.security.core.userdetails.UserDetailsService {
 
-   private final Logger log = LoggerFactory.getLogger(UserDetailsService.class);
-
-   private final UserSnapshotFinder userSnapshotFinder;
+   private final UserRepository userRepository;
 
    @Autowired
-   public UserDetailsService(UserSnapshotFinder userSnapshotFinder) {
-      this.userSnapshotFinder = userSnapshotFinder;
+   public UserDetailsService(UserRepository userRepository) {
+      this.userRepository = userRepository;
    }
 
    @Override
    @Transactional
    public UserDetails loadUserByUsername(final String login) {
-      log.debug("Authenticating {}", login);
+      User user = userRepository.findOneByLoginIgnoreCase(login);
 
-      UserSnapshot userSnapshot = userSnapshotFinder.findByLogin(login);
-
-      if (userSnapshot == null) {
+      if (user == null) {
          throw new UsernameNotFoundException("User with login " + login + " was not found in database");
       }
 
-      return new CustomUserDetails(userSnapshot.getId(), userSnapshot.getLogin(), userSnapshot.getPassword());
+      return new CustomUserDetails(user.getId(), user.getLogin(), user.getPassword());
 
    }
 }

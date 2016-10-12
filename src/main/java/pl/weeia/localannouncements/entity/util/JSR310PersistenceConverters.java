@@ -1,4 +1,4 @@
-package pl.weeia.localannouncements.domain.util;
+package pl.weeia.localannouncements.entity.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,10 +8,10 @@ import java.util.Date;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import pl.weeia.localannouncements.domain.util.JSR310DateConverters.DateToLocalDateTimeConverter;
-import pl.weeia.localannouncements.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
-import pl.weeia.localannouncements.domain.util.JSR310DateConverters.LocalDateTimeToDateConverter;
-import pl.weeia.localannouncements.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
+import pl.weeia.localannouncements.entity.util.JSR310DateConverters.DateToLocalDateTimeConverter;
+import pl.weeia.localannouncements.entity.util.JSR310DateConverters.DateToZonedDateTimeConverter;
+import pl.weeia.localannouncements.entity.util.JSR310DateConverters.LocalDateTimeToDateConverter;
+import pl.weeia.localannouncements.entity.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
 
 public final class JSR310PersistenceConverters {
 
