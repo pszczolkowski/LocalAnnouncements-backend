@@ -27,4 +27,10 @@ public class UserBoImpl implements UserBO {
         return user;
     }
 
+    @Override
+    public void setPassword(long userId, String password) {
+        User user = userRepository.findOne(userId);
+        user.setPassword(passwordEncodingService.encode(password));
+    }
+
 }

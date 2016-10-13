@@ -7,4 +7,6 @@ public interface UserBO {
 
     User register(String login, String password, int age, Gender gender);
     
+    void setPassword(long userId, String password);
+    
 }

@@ -2,6 +2,7 @@ package pl.weeia.localannouncements.web.restapi.account;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import javax.validation.Valid;
 
@@ -25,6 +26,7 @@ import io.swagger.annotations.ApiResponses;
 import pl.weeia.localannouncements.businessobject.UserBO;
 import pl.weeia.localannouncements.entity.User;
 import pl.weeia.localannouncements.repository.UserRepository;
+import pl.weeia.localannouncements.service.userPasswordEncoder.PasswordEncodingService;
 
 @RestController
 @RequestMapping("/account")
@@ -33,13 +35,15 @@ public class AccountApi {
     private final UserRepository userRepository;
     private final UserBO userBO;
     private final Validator userRegisterValidator;
+    private final PasswordEncodingService passwordEncodingService;
 
     @Autowired
     public AccountApi(UserRepository userSnapshotFinder, UserBO userBO,
-            @Qualifier("accountRegisterValidator") Validator userRegisterValidator) {
+            @Qualifier("accountRegisterValidator") Validator userRegisterValidator, PasswordEncodingService passwordEncodingService) {
         this.userRepository = userSnapshotFinder;
         this.userBO = userBO;
         this.userRegisterValidator = userRegisterValidator;
+        this.passwordEncodingService = passwordEncodingService;
     }
 
     @InitBinder("accountRegister")
@@ -71,16 +75,19 @@ public class AccountApi {
         return new ResponseEntity<>(new Account(user), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Change password for account with id", notes = "Empty body")
+    @ApiOperation("Change password for account with id")
     @ApiResponses({ @ApiResponse(code = 200, message = "Changed password for account") })
-    @RequestMapping(value = "/change_password", method = RequestMethod.POST)
-    public HttpEntity<Account> changePassword(@RequestBody String password) {
+    @RequestMapping(value = "/password", method = PUT)
+    public HttpEntity<Account> changePassword(@Valid @RequestBody PasswordChange passwordChange) {
         User user = getLoggedUser();
-
-        // TODO
-        // userBO.changePassword(user.getId(), password);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        boolean isPreviousPasswordCorrect = passwordEncodingService.isMatch(passwordChange.getPreviousPassword(), user.getPassword());
+        
+        if (!isPreviousPasswordCorrect) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
+        userBO.setPassword(user.getId(), passwordChange.getNewPassword());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

@@ -104,5 +104,9 @@ public class User implements Serializable {
     public Gender getGender() {
         return gender;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
     
 }
