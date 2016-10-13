@@ -13,18 +13,18 @@ public class UserBoImpl implements UserBO {
 
     private final UserRepository userRepository;
     private final PasswordEncodingService passwordEncodingService;
-    
+
     @Autowired
     public UserBoImpl(UserRepository userRepository, PasswordEncodingService passwordEncodingService) {
-       this.userRepository = userRepository;
-       this.passwordEncodingService = passwordEncodingService;
+        this.userRepository = userRepository;
+        this.passwordEncodingService = passwordEncodingService;
     }
-    
+
     @Override
     public User register(String login, String password, int age, Gender gender) {
-	User user = new User(login, passwordEncodingService.encode(password), age, gender);
-	user = userRepository.save(user);
-	return user;
+        User user = new User(login, passwordEncodingService.encode(password), age, gender);
+        user = userRepository.save(user);
+        return user;
     }
 
 }
