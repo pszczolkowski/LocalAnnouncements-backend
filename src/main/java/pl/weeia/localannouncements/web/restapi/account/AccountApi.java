@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
@@ -70,6 +71,7 @@ public class AccountApi {
     @ApiOperation(value = "Get account of logged user", notes = "Returns account of logged user")
     @ApiResponses({ @ApiResponse(code = 200, message = "Found account of logged user") })
     @RequestMapping(method = GET)
+    @PreAuthorize("isAuthenticated()")
     public HttpEntity<Account> get() {
         User user = getLoggedUser();
         return new ResponseEntity<>(new Account(user), HttpStatus.OK);
