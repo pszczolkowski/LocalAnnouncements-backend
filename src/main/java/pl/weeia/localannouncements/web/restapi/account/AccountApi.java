@@ -63,7 +63,7 @@ public class AccountApi {
     @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE)
     public HttpEntity<Account> register(@Valid @RequestBody AccountRegister accountNew) {
         User userSnapshot = userBO.register(accountNew.getLogin(), accountNew.getPassword(), accountNew.getAge(),
-                accountNew.getGender());
+                accountNew.getGender(), accountNew.getEmail());
 
         return new ResponseEntity<>(new Account(userSnapshot), HttpStatus.OK);
     }

@@ -9,4 +9,6 @@ public interface UserRepository
 
    User findOneByLoginIgnoreCase(String login);
 
+   User findOneByEmailIgnoreCase(String email);
+
 }

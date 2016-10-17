@@ -4,9 +4,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
 import io.swagger.annotations.ApiModelProperty;
+import pl.weeia.localannouncements.sharedkernel.annotations.Email;
 import pl.weeia.localannouncements.sharedkernel.constant.Gender;
 
 public class AccountRegister {
@@ -26,6 +28,11 @@ public class AccountRegister {
 	
 	@NotNull
 	private Gender gender;
+	
+	@NotEmpty
+    @Size(max = 255)
+	@Email
+    private String email;
 
 	@ApiModelProperty(value = "Username for new account")
 	public String getLogin() {
@@ -62,5 +69,14 @@ public class AccountRegister {
 	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
+
+	@ApiModelProperty(value = "User email for new account")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 	
 }

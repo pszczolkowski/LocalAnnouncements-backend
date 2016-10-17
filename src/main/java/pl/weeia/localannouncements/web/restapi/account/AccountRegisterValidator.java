@@ -29,9 +29,17 @@ public class AccountRegisterValidator extends AbstractValidator {
 		if (loginIsTaken(accountRegister.getLogin())) {
 			errors.rejectValue("login", "LoginAlreadyInUse");
 		}
+		
+		if (emailIsAlreadyTaken(accountRegister.getEmail())) {
+		    errors.rejectValue("email", "EmailAlreadyInUse");
+		}
 	}
 
-	private boolean loginIsTaken(String login) {
+    private boolean loginIsTaken(String login) {
 		return userRepository.findOneByLoginIgnoreCase(login) != null;
 	}
+    
+    private boolean emailIsAlreadyTaken(String email) {
+        return userRepository.findOneByEmailIgnoreCase(email) != null;
+    }
 }

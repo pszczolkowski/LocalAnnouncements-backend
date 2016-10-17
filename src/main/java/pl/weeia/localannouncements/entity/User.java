@@ -15,8 +15,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
+import pl.weeia.localannouncements.sharedkernel.annotations.Email;
 import pl.weeia.localannouncements.sharedkernel.constant.Gender;
 
 @Entity
@@ -47,15 +49,22 @@ public class User implements Serializable {
     @NotNull
     @Enumerated(STRING)
     private Gender gender;
+    
+    @NotEmpty
+    @Size(max = 255)
+    @Column(unique = true)
+    @Email
+    private String email;
 
     protected User() {
     }
 
-    public User(String login, String password, int age, Gender gender) {
+    public User(String login, String password, int age, Gender gender, String email) {
 	this.login = login;
 	this.password = password;
 	this.age = age;
 	this.gender = gender;
+    this.email = email;
     }
 
     public void changePassword(String password) {
@@ -107,6 +116,10 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
     }
     
 }

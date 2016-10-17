@@ -21,8 +21,8 @@ public class UserBoImpl implements UserBO {
     }
 
     @Override
-    public User register(String login, String password, int age, Gender gender) {
-        User user = new User(login, passwordEncodingService.encode(password), age, gender);
+    public User register(String login, String password, int age, Gender gender, String email) {
+        User user = new User(login, passwordEncodingService.encode(password), age, gender, email);
         user = userRepository.save(user);
         return user;
     }

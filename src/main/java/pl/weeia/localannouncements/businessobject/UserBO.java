@@ -5,7 +5,7 @@ import pl.weeia.localannouncements.sharedkernel.constant.Gender;
 
 public interface UserBO {
 
-    User register(String login, String password, int age, Gender gender);
+    User register(String login, String password, int age, Gender gender, String email);
     
     void setPassword(long userId, String password);
     

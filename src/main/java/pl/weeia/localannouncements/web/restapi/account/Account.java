@@ -12,13 +12,14 @@ public class Account {
     private final String username;
     private final int age;
     private final Gender gender;
+    private final String emial;
 
     public Account(User user) {
         this.id = user.getId();
         this.username = user.getLogin();
         this.age = user.getAge();
         this.gender = user.getGender();
-
+        this.emial = user.getEmail();
     }
 
     @ApiModelProperty(value = "Account unique identifier")
@@ -39,6 +40,11 @@ public class Account {
     @ApiModelProperty(value = "User gender")
     public Gender getGender() {
         return gender;
+    }
+
+    @ApiModelProperty(value = "User email")
+    public String getEmial() {
+        return emial;
     }
 
 }
