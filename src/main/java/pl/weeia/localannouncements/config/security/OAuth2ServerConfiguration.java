@@ -1,5 +1,7 @@
 package pl.weeia.localannouncements.config.security;
 
+import static org.springframework.http.HttpMethod.POST;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +65,7 @@ public class OAuth2ServerConfiguration {
          .and()                
             .authorizeRequests()
             .antMatchers("/authenticate").permitAll()
-            .antMatchers("/account/register").permitAll()
+            .antMatchers(POST, "/account").permitAll()
             .antMatchers("/v2/*").permitAll()
             .antMatchers("/file/**").permitAll()
             .antMatchers("/**").authenticated();

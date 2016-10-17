@@ -58,9 +58,9 @@ public class AccountApi {
         return userRepository.findOneByLoginIgnoreCase(username);
     }
 
-    @ApiOperation(value = "Create new account", notes = "Returns login and id of created account")
+    @ApiOperation(value = "Create new account")
     @ApiResponses({ @ApiResponse(code = 200, message = "Account created") })
-    @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE)
     public HttpEntity<Account> register(@Valid @RequestBody AccountRegister accountNew) {
         User userSnapshot = userBO.register(accountNew.getLogin(), accountNew.getPassword(), accountNew.getAge(),
                 accountNew.getGender(), accountNew.getEmail());
