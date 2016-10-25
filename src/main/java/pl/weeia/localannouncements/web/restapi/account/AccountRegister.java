@@ -20,7 +20,7 @@ public class AccountRegister {
 
 	@NotNull
 	@Size(min = 5, max = 30)
-	private String password;
+	private String rawPassword;
 	
 	@NotNull
 	@Range(min = 1, max = 99)
@@ -44,12 +44,12 @@ public class AccountRegister {
 	}
 
 	@ApiModelProperty(value = "Password for new account")
-	public String getPassword() {
-		return password;
+	public String getRawPassword() {
+		return rawPassword;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setRawPassword(String password) {
+		this.rawPassword = password;
 	}
 
 	@ApiModelProperty(value = "User age for new account")

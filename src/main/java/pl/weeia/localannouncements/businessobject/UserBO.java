@@ -8,5 +8,7 @@ public interface UserBO {
     User register(String login, String password, int age, Gender gender, String email);
     
     void setPassword(long userId, String password);
+
+    void setPasswordEncoded(long userId, String passwordHash);
     
 }

@@ -12,6 +12,7 @@ import pl.weeia.localannouncements.sharedkernel.constant.Gender;
 public class UserBoImpl implements UserBO {
 
     private final UserRepository userRepository;
+
     private final PasswordEncodingService passwordEncodingService;
 
     @Autowired
@@ -31,6 +32,12 @@ public class UserBoImpl implements UserBO {
     public void setPassword(long userId, String password) {
         User user = userRepository.findOne(userId);
         user.setPassword(passwordEncodingService.encode(password));
+    }
+
+    @Override
+    public void setPasswordEncoded(long userId, String passwordHash) {
+        User user = userRepository.findOne(userId);
+        user.setPassword(passwordHash);
     }
 
 }

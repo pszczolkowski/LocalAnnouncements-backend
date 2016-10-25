@@ -7,6 +7,9 @@ import pl.weeia.localannouncements.repository.UserRepository;
 import pl.weeia.localannouncements.sharedkernel.annotations.RestValidator;
 import pl.weeia.localannouncements.web.restapi.commonvalidation.AbstractValidator;
 
+import javax.validation.ParameterNameProvider;
+import javax.validation.executable.ExecutableValidator;
+
 @RestValidator
 public class AccountRegisterValidator extends AbstractValidator {
 
@@ -41,5 +44,15 @@ public class AccountRegisterValidator extends AbstractValidator {
     
     private boolean emailIsAlreadyTaken(String email) {
         return userRepository.findOneByEmailIgnoreCase(email) != null;
+    }
+
+    @Override
+    public ExecutableValidator forExecutables() {
+        return null;
+    }
+
+    @Override
+    public ParameterNameProvider getParameterNameProvider() {
+        return null;
     }
 }
