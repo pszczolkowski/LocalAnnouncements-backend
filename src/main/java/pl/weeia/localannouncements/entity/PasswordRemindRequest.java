@@ -68,22 +68,6 @@ public class PasswordRemindRequest {
         return id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRequested(LocalDateTime requested) {
-        this.requested = requested;
-    }
-
-    public void setActivationToken(String activationToken) {
-        this.activationToken = activationToken;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public void deactivate() { valid = false;}
 
     public boolean isValid() { return  valid;}
