@@ -2,6 +2,7 @@ package pl.weeia.localannouncements.web.restapi.account;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import javax.validation.Valid;
@@ -104,7 +105,7 @@ public class AccountApi {
 
     @ApiOperation("Remind password for account with given username and email")
     @ApiResponses({ @ApiResponse(code = 200, message = "Password changing link sent on email address") })
-    @RequestMapping(value = "remind", method = PUT)
+    @RequestMapping(value = "password/remind", method = POST)
     public HttpEntity<?> remindPassword(@Valid @RequestBody PasswordRemind passwordRemind)
     {
         User user = userRepository.findOneByEmailIgnoreCase(passwordRemind.getEmail());
