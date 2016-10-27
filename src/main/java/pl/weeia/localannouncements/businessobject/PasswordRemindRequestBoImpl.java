@@ -56,6 +56,10 @@ public class PasswordRemindRequestBoImpl implements PasswordRemindRequestBO {
     @Override
     public void deactivate(Long id) {
         PasswordRemindRequest passwordRemindRequest = passwordRemindRequestRepository.findOne(id);
+        if (passwordRemindRequest == null) {
+            throw new IllegalArgumentException("PasswordRemindRequest with id <" + id + "> does not exist");
+        }
+        
         passwordRemindRequest.deactivate();
         passwordRemindRequestRepository.save(passwordRemindRequest);
     }
