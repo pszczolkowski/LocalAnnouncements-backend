@@ -105,7 +105,7 @@ public class AccountApi {
     @ApiOperation("Remind password for account with given username and email")
     @ApiResponses({ @ApiResponse(code = 200, message = "Password changing link sent on email address") })
     @RequestMapping(value = "remind", method = PUT)
-    public HttpEntity remindPassword(@Valid @RequestBody PasswordRemind passwordRemind)
+    public HttpEntity<?> remindPassword(@Valid @RequestBody PasswordRemind passwordRemind)
     {
         User user = userRepository.findOneByEmailIgnoreCase(passwordRemind.getEmail());
         if(user != null && user.getLogin().equals(passwordRemind.getLogin()))
@@ -127,7 +127,7 @@ public class AccountApi {
     @ApiOperation("Activate password change for account with given token")
     @ApiResponses({ @ApiResponse(code = 200, message = "Changed generated password for account") })
     @RequestMapping(value = "activate")
-    public HttpEntity activatePassword(@RequestParam(value = "token", required = true)  String token) {
+    public HttpEntity<?> activatePassword(@RequestParam(value = "token", required = true)  String token) {
         PasswordRemindRequest passwordRemindRequest =
                 passwordRemindRequestRepository.findOneByActivationToken(token);
         if(passwordRemindRequest != null && passwordRemindRequest.isValid())
