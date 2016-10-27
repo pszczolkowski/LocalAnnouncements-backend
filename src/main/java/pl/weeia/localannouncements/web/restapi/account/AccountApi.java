@@ -137,11 +137,11 @@ public class AccountApi {
         if(passwordRemindRequest != null && passwordRemindRequest.isValid())
         {
             passwordRemindingService.setPasswordFromRemindRequest(token);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         else
         {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
