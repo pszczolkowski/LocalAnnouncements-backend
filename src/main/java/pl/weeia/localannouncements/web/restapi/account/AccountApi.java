@@ -28,6 +28,7 @@ import pl.weeia.localannouncements.entity.PasswordRemindRequest;
 import pl.weeia.localannouncements.entity.User;
 import pl.weeia.localannouncements.repository.PasswordRemindRequestRepository;
 import pl.weeia.localannouncements.repository.UserRepository;
+import pl.weeia.localannouncements.service.account.PasswordRemindingService;
 import pl.weeia.localannouncements.service.userPasswordEncoder.PasswordEncodingService;
 import pl.weeia.localannouncements.sharedkernel.util.MailSender;
 
@@ -45,17 +46,19 @@ public class AccountApi {
     private final Validator userRegisterValidator;
     private final PasswordEncodingService passwordEncodingService;
     private final PasswordRemindRequestRepository passwordRemindRequestRepository;
+    private final PasswordRemindingService passwordRemindingService;
 
     @Autowired
     public AccountApi(UserRepository userSnapshotFinder, UserBO userBO, PasswordRemindRequestBO passwordRemindRequestBO,
             @Qualifier("accountRegisterValidator") Validator userRegisterValidator, PasswordEncodingService passwordEncodingService,
-            PasswordRemindRequestRepository passwordRemindRequestRepository) {
+            PasswordRemindRequestRepository passwordRemindRequestRepository, PasswordRemindingService passwordRemindingService) {
         this.userRepository = userSnapshotFinder;
         this.userBO = userBO;
         this.userRegisterValidator = userRegisterValidator;
         this.passwordEncodingService = passwordEncodingService;
         this.passwordRemindRequestRepository = passwordRemindRequestRepository;
         this.passwordRemindRequestBO = passwordRemindRequestBO;
+        this.passwordRemindingService = passwordRemindingService;
     }
 
     @InitBinder("accountRegister")
@@ -133,8 +136,7 @@ public class AccountApi {
                 passwordRemindRequestRepository.findOneByActivationToken(token);
         if(passwordRemindRequest != null && passwordRemindRequest.isValid())
         {
-            userBO.setPasswordEncoded(passwordRemindRequest.getUser().getId(), passwordRemindRequest.getPassword());
-            passwordRemindRequestBO.deactivate(passwordRemindRequest.getId());
+            passwordRemindingService.setPasswordFromRemindRequest(token);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else
