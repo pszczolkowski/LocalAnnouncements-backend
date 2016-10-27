@@ -5,9 +5,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.tomcat.util.net.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
@@ -33,6 +35,7 @@ import pl.weeia.localannouncements.service.userPasswordEncoder.PasswordEncodingS
 import pl.weeia.localannouncements.sharedkernel.util.MailSender;
 
 import java.math.BigInteger;
+import java.net.MalformedURLException;
 import java.security.SecureRandom;
 
 @RestController
@@ -108,7 +111,7 @@ public class AccountApi {
     @ApiOperation("Remind password for account with given username and email")
     @ApiResponses({ @ApiResponse(code = 200, message = "Password changing link sent on email address") })
     @RequestMapping(value = "password/remind", method = POST)
-    public HttpEntity<?> remindPassword(@Valid @RequestBody PasswordRemind passwordRemind) {
+    public HttpEntity<?> remindPassword(@Valid @RequestBody PasswordRemind passwordRemind, HttpServletRequest request) {
         User user = userRepository.findOneByEmailIgnoreCase(passwordRemind.getEmail());
         if (user != null && user.getLogin().equals(passwordRemind.getLogin())) {
             SecureRandom random = new SecureRandom();
@@ -117,13 +120,23 @@ public class AccountApi {
             passwordRemindRequestBO.queuePasswordChange(token, user.getId(), rawPassword);
             MailSender.sendMail(user.getEmail(), "Password change",
                     "We have generated new password for you account: " + rawPassword
-                            + ". In order to activate it, click this link: account/password_reminder/activate?token="
+                            + ". In order to activate it, click this link: " + getURL(request) + "/account/password_reminder/activate?token="
                             + token);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+    }
+    
+    public String getURL(HttpServletRequest request) {
+        try {
+            URL requestURL = new URL(request.getRequestURL().toString());
+            String port = requestURL.getPort() == -1 ? "" : ":" + requestURL.getPort();
+            return requestURL.getProtocol() + "://" + requestURL.getHost() + port + request.getContextPath();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @ApiOperation("Activate password change for account with given token")
