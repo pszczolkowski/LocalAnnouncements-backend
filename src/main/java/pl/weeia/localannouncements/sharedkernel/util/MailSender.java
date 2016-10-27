@@ -2,16 +2,21 @@ package pl.weeia.localannouncements.sharedkernel.util;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
 import java.util.Properties;
 
 /**
  * Created by marcin on 24.10.16.
+ * 
+ * TODO
+ * - extract configuration parameters to proper .properties files
+ * - handle exceptions properly
+ * - do it all asynchronously
+ * - there should be services for each email send case
  */
 public class MailSender {
 
-    private static final String username = "tutaj nazwa konta np konsultant@gmail.com";
-    private static final String password = "haslo dla konta ";
+    private static final String username = "";
+    private static final String password = "";
 
     public static void sendMail(String clientAddress, String subject, String clientMessage) {
 
