@@ -119,7 +119,7 @@ public class AccountApi {
             String rawPassword = RandomStringUtils.randomAlphabetic(8);
             passwordRemindRequestBO.queuePasswordChange(user,token,new Date(), rawPassword);
             MailSender.sendMail(user.getEmail(), "Password change",
-                    "We have generated new password for you account: " + rawPassword + ". In order to activate it, click this link: account/activate?token=" + token);
+                    "We have generated new password for you account: " + rawPassword + ". In order to activate it, click this link: account/password_reminder/activate?token=" + token);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else
@@ -130,7 +130,7 @@ public class AccountApi {
     }
     @ApiOperation("Activate password change for account with given token")
     @ApiResponses({ @ApiResponse(code = 200, message = "Changed generated password for account") })
-    @RequestMapping(value = "activate")
+    @RequestMapping(value = "password_reminder/activate")
     public HttpEntity<?> activatePassword(@RequestParam(value = "token", required = true)  String token) {
         PasswordRemindRequest passwordRemindRequest =
                 passwordRemindRequestRepository.findOneByActivationToken(token);
