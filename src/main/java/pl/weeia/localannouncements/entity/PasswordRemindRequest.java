@@ -33,7 +33,7 @@ public class PasswordRemindRequest {
     private String activationToken;
 
     @NotNull
-    @OneToOne
+    @ManyToOne
     private User user;
 
     @NotNull
