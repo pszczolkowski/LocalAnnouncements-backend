@@ -5,7 +5,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 /**
  * Created by marcin on 23.10.16.
@@ -24,8 +25,7 @@ public class PasswordRemindRequest {
 
     @NotNull
     @Column(columnDefinition="TIMESTAMP")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date requested = new Date();
+    private LocalDateTime requested;
 
     @NotEmpty
     @Size(max = 128)
@@ -39,7 +39,7 @@ public class PasswordRemindRequest {
     @NotNull
     private boolean valid = true;
 
-    public PasswordRemindRequest(User user, String activationToken, Date requested, String password) {
+    public PasswordRemindRequest(User user, String activationToken, LocalDateTime requested, String password) {
         this.user = user;
         this.activationToken = activationToken;
         this.requested = requested;
@@ -69,7 +69,7 @@ public class PasswordRemindRequest {
         return password;
     }
 
-    public Date getRequested() {
+    public LocalDateTime getRequested() {
         return requested;
     }
 
@@ -89,7 +89,7 @@ public class PasswordRemindRequest {
         this.password = password;
     }
 
-    public void setRequested(Date requested) {
+    public void setRequested(LocalDateTime requested) {
         this.requested = requested;
     }
 

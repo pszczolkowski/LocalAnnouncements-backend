@@ -8,7 +8,7 @@ import pl.weeia.localannouncements.repository.UserRepository;
 import pl.weeia.localannouncements.service.userPasswordEncoder.PasswordEncodingService;
 import pl.weeia.localannouncements.sharedkernel.annotations.BussinesObject;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by marcin on 23.10.16.
@@ -30,8 +30,13 @@ public class PasswordRemindRequestBoImpl implements PasswordRemindRequestBO {
     }
 
     @Override
-    public PasswordRemindRequest queuePasswordChange(User user, String activationToken, Date requested, String password) {
-        PasswordRemindRequest passwordRemindRequest = new PasswordRemindRequest(user, activationToken, requested,
+    public PasswordRemindRequest queuePasswordChange(String activationToken, long userId, String password) {
+        User user = userRepository.findOne(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("user with id <" + userId + "> does not exist");
+        }
+        
+        PasswordRemindRequest passwordRemindRequest = new PasswordRemindRequest(user, activationToken, LocalDateTime.now(),
                 passwordEncodingService.encode(password));
 
         passwordRemindRequestRepository.save(passwordRemindRequest);
@@ -52,4 +57,5 @@ public class PasswordRemindRequestBoImpl implements PasswordRemindRequestBO {
         passwordRemindRequest.deactivate();
         passwordRemindRequestRepository.save(passwordRemindRequest);
     }
+
 }

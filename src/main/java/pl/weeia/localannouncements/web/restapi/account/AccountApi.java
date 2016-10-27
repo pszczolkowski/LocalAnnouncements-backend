@@ -34,7 +34,6 @@ import pl.weeia.localannouncements.sharedkernel.util.MailSender;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/account")
@@ -115,7 +114,7 @@ public class AccountApi {
             SecureRandom random = new SecureRandom();
             String token = new BigInteger(130, random).toString(32);
             String rawPassword = RandomStringUtils.randomAlphabetic(8);
-            passwordRemindRequestBO.queuePasswordChange(user, token, new Date(), rawPassword);
+            passwordRemindRequestBO.queuePasswordChange(token, user.getId(), rawPassword);
             MailSender.sendMail(user.getEmail(), "Password change",
                     "We have generated new password for you account: " + rawPassword
                             + ". In order to activate it, click this link: account/password_reminder/activate?token="
