@@ -114,8 +114,8 @@ public class AccountApi {
             String token = new BigInteger(130, random).toString(32);
             String rawPassword = RandomStringUtils.randomAlphabetic(8);
             passwordRemindRequestBO.queuePasswordChange(user,token,new Date(), rawPassword);
-            MailSender.sendMail(user.getEmail(), "Zmiana hasła do serwisu",
-                    "Aby aktywować nowe hasło: "+rawPassword+" do konta, otwórz link: account/activate?token="+token);
+            MailSender.sendMail(user.getEmail(), "Password change",
+                    "We have generated new password for you account: " + rawPassword + ". In order to activate it, click this link: account/activate?token=" + token);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else
