@@ -109,38 +109,33 @@ public class AccountApi {
     @ApiOperation("Remind password for account with given username and email")
     @ApiResponses({ @ApiResponse(code = 200, message = "Password changing link sent on email address") })
     @RequestMapping(value = "password/remind", method = POST)
-    public HttpEntity<?> remindPassword(@Valid @RequestBody PasswordRemind passwordRemind)
-    {
+    public HttpEntity<?> remindPassword(@Valid @RequestBody PasswordRemind passwordRemind) {
         User user = userRepository.findOneByEmailIgnoreCase(passwordRemind.getEmail());
-        if(user != null && user.getLogin().equals(passwordRemind.getLogin()))
-        {
+        if (user != null && user.getLogin().equals(passwordRemind.getLogin())) {
             SecureRandom random = new SecureRandom();
             String token = new BigInteger(130, random).toString(32);
             String rawPassword = RandomStringUtils.randomAlphabetic(8);
-            passwordRemindRequestBO.queuePasswordChange(user,token,new Date(), rawPassword);
+            passwordRemindRequestBO.queuePasswordChange(user, token, new Date(), rawPassword);
             MailSender.sendMail(user.getEmail(), "Password change",
-                    "We have generated new password for you account: " + rawPassword + ". In order to activate it, click this link: account/password_reminder/activate?token=" + token);
+                    "We have generated new password for you account: " + rawPassword
+                            + ". In order to activate it, click this link: account/password_reminder/activate?token="
+                            + token);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
-        else
-        {
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }
+
     @ApiOperation("Activate password change for account with given token")
     @ApiResponses({ @ApiResponse(code = 200, message = "Changed generated password for account") })
     @RequestMapping(value = "password_reminder/activate")
-    public HttpEntity<?> activatePassword(@RequestParam(value = "token", required = true)  String token) {
-        PasswordRemindRequest passwordRemindRequest =
-                passwordRemindRequestRepository.findOneByActivationToken(token);
-        if(passwordRemindRequest != null && passwordRemindRequest.isValid())
-        {
+    public HttpEntity<?> activatePassword(@RequestParam(value = "token", required = true) String token) {
+        PasswordRemindRequest passwordRemindRequest = passwordRemindRequestRepository.findOneByActivationToken(token);
+        if (passwordRemindRequest != null && passwordRemindRequest.isValid()) {
             passwordRemindingService.setPasswordFromRemindRequest(token);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        else
-        {
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
