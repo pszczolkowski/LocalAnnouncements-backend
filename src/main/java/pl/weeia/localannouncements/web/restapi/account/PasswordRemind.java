@@ -3,7 +3,6 @@ package pl.weeia.localannouncements.web.restapi.account;
 import org.hibernate.validator.constraints.NotEmpty;
 import pl.weeia.localannouncements.sharedkernel.annotations.Email;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
