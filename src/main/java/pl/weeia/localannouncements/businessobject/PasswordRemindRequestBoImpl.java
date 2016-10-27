@@ -9,6 +9,7 @@ import pl.weeia.localannouncements.service.userPasswordEncoder.PasswordEncodingS
 import pl.weeia.localannouncements.sharedkernel.annotations.BussinesObject;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by marcin on 23.10.16.
@@ -35,20 +36,21 @@ public class PasswordRemindRequestBoImpl implements PasswordRemindRequestBO {
         if (user == null) {
             throw new IllegalArgumentException("user with id <" + userId + "> does not exist");
         }
+
+        deactivateAllExistingRemindersFor(user);
         
         PasswordRemindRequest passwordRemindRequest = new PasswordRemindRequest(user, activationToken, LocalDateTime.now(),
                 passwordEncodingService.encode(password));
 
         passwordRemindRequestRepository.save(passwordRemindRequest);
-        /*PasswordRemindRequest others = passwordRemindRequestRepository.findOneByUser(user);
-        if(others == null) {
-            passwordRemindRequestRepository.save(passwordRemindRequest);
-        }
-        else
-        {
-            passwordRemindRequestRepository.
-        }*/
         return passwordRemindRequest;
+    }
+
+    private void deactivateAllExistingRemindersFor(User user) {
+        List<PasswordRemindRequest> userPasswordRemindRequests = passwordRemindRequestRepository.findAllByUserAndValidTrue(user);
+        for (PasswordRemindRequest passwordRemindRequest : userPasswordRemindRequests) {
+            passwordRemindRequest.deactivate();
+        }
     }
 
     @Override

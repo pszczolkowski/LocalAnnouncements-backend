@@ -1,5 +1,7 @@
 package pl.weeia.localannouncements.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.weeia.localannouncements.entity.PasswordRemindRequest;
 import pl.weeia.localannouncements.entity.User;
@@ -11,6 +13,6 @@ public interface PasswordRemindRequestRepository extends JpaRepository<PasswordR
 {
 
         PasswordRemindRequest findOneByActivationToken(String activationToken);
-        PasswordRemindRequest findOneByUser(User user);
+        List<PasswordRemindRequest> findAllByUserAndValidTrue(User user);
 
 }
