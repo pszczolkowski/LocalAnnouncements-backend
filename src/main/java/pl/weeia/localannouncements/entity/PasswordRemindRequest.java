@@ -48,23 +48,6 @@ public class PasswordRemindRequest {
 
     public PasswordRemindRequest() {    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        PasswordRemindRequest passwordRemindRequest = (PasswordRemindRequest) o;
-        if (!passwordRemindRequest.getUser().getLogin().equals(user.getLogin())) {
-            return false;
-        }
-
-        return true;
-    }
-
     public String getPassword() {
         return password;
     }
