@@ -1,5 +1,6 @@
 package pl.weeia.localannouncements.entity.util;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -56,6 +57,20 @@ public final class JSR310PersistenceConverters {
         @Override
         public LocalDateTime convertToEntityAttribute(Date date) {
             return DateToLocalDateTimeConverter.INSTANCE.convert(date);
+        }
+    }
+    
+    @Converter(autoApply = true)
+    public static class DurationConverter implements AttributeConverter<Duration, Integer> {
+
+        @Override
+        public Integer convertToDatabaseColumn(Duration duration) {
+            return duration == null ? null : (int) duration.getSeconds();
+        }
+
+        @Override
+        public Duration convertToEntityAttribute(Integer integer) {
+            return Duration.ofSeconds(integer);
         }
     }
 }
