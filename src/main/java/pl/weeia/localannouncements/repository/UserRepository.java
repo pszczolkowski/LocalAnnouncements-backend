@@ -11,4 +11,6 @@ public interface UserRepository
 
    User findOneByEmailIgnoreCase(String email);
 
+   User findOneByLoginIgnoreCaseAndEmailIgnoreCase(String login, String email);
+
 }

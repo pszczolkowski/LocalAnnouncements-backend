@@ -112,8 +112,8 @@ public class AccountApi {
     @ApiResponses({ @ApiResponse(code = 200, message = "Password changing link sent on email address") })
     @RequestMapping(value = "password/remind", method = POST)
     public HttpEntity<?> remindPassword(@Valid @RequestBody PasswordRemind passwordRemind, HttpServletRequest request) {
-        User user = userRepository.findOneByEmailIgnoreCase(passwordRemind.getEmail());
-        if (user != null && user.getLogin().equals(passwordRemind.getLogin())) {
+        User user = userRepository.findOneByLoginIgnoreCaseAndEmailIgnoreCase(passwordRemind.getLogin(), passwordRemind.getEmail());
+        if (user != null) {
             SecureRandom random = new SecureRandom();
             String token = new BigInteger(130, random).toString(32);
             String rawPassword = RandomStringUtils.randomAlphabetic(8);
