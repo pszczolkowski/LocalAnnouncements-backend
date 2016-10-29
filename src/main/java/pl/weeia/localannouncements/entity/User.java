@@ -60,7 +60,7 @@ public class User implements Serializable {
     }
 
     public User(String login, String password, int age, Gender gender, String email) {
-	this.login = login;
+	this.login = login.toLowerCase();
 	this.password = password;
 	this.age = age;
 	this.gender = gender;
